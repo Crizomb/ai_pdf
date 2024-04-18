@@ -14,7 +14,6 @@ class VectorDbManager:
         self.db_directory = db_directory
         self.chunk_size = chunk_size
 
-
     def create_vector_store_from_pdf(self, pdf_path):
         """
         create a chroma vector store from a pdf file path
@@ -26,7 +25,7 @@ class VectorDbManager:
         """
         pdf_path = Path(pdf_path)
         pdf_name = pdf_path.name
-        vector_directory = self.db_directory/self.embedding_name/pdf_name
+        vector_directory = self.db_directory / self.embedding_name / pdf_name
 
         if os.path.isdir(vector_directory):
             print(f"{vector_directory} found, not recreating a vector store")
@@ -49,7 +48,7 @@ class VectorDbManager:
         docs = text_splitter.split_documents(docs)
 
         vectorstore = Chroma.from_documents(docs, self.embedding_function, persist_directory=vector_directory)
-        print("vector store created")
+        print("pdf vector store created")
         print(vectorstore)
 
     def create_vector_store_from_latex(self, latex_path: Path):
@@ -62,7 +61,7 @@ class VectorDbManager:
         :return:
         """
         doc_name = latex_path.name
-        vector_directory = self.db_directory/self.embedding_name/doc_name
+        vector_directory = self.db_directory / self.embedding_name / doc_name
 
         if os.path.isdir(vector_directory):
             print(f"{vector_directory} found, not recreating a vector store")
@@ -71,10 +70,13 @@ class VectorDbManager:
         print(f"creating vector store for {vector_directory}")
 
         with open(latex_path, mode="r") as file:
-            text_splitter = RecursiveCharacterTextSplitter(chunk_size=self.chunk_size, chunk_overlap=100)
-            docs = text_splitter.split_document(file.read())
+            text_splitter = RecursiveCharacterTextSplitter.from_language(Language.MARKDOWN, chunk_size=self.chunk_size, chunk_overlap=64)
+            texts = text_splitter.split_text(file.read())
 
-        vectorstore = Chroma.from_documents(docs, self.embedding_function, persist_directory=vector_directory)
+        print(texts)
+        vectorstore = Chroma.from_texts(texts, self.embedding_function, persist_directory=vector_directory)
+        print("latex vector store created")
+        print(vectorstore)
 
     def get_chroma(self, doc_name):
         """
@@ -83,6 +85,5 @@ class VectorDbManager:
         :param doc_name:
         :return:
         """
-        vector_directory = self.db_directory/self.embedding_name/doc_name
+        vector_directory = self.db_directory / self.embedding_name / doc_name
         return Chroma(persist_directory=vector_directory, embedding_function=self.embedding_function)
-

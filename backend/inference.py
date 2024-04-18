@@ -17,28 +17,32 @@ class InferenceInstance:
         self.nb_chunks_retrieved = nb_chunks_retrieved
 
     def get_next_token(self, input_user: str, doc_name: str) -> Iterator[Dict[str, str]]:
+        is_pdf = doc_name.endswith(".pdf")
+        print(f"doc_name: {doc_name}")
         new_assistant_message = {"role": "assistant", "content": ""}
         search_results = self._get_search_results(input_user, doc_name)
         print(f"search results: {search_results}")
-        pages = self._update_history(input_user, search_results)
+        pages = self._update_history(input_user, search_results, is_pdf)
         pages_info = f"pages used : p" + " p".join(pages)
         print(f"history: {self.history}")
         completion = self._get_completion()
 
         for chunk in completion:
-            new_assistant_message["content"] += chunk.choices[0].delta.content
-            yield pages_info + " " + new_assistant_message["content"]
+            if chunk.choices[0].delta.content:
+                new_assistant_message["content"] += chunk.choices[0].delta.content
+                yield pages_info + "\n\n " + new_assistant_message["content"]
 
     def _get_search_results(self, input_user: str, doc_name: str):
         print(f"input_user: {input_user}")
         vector_db = self.vector_db_manager.get_chroma(doc_name)
         return vector_db.similarity_search(input_user, k=4)
 
-    def _update_history(self, input_user: str, search_results):
+    def _update_history(self, input_user: str, search_results, is_pdf):
         some_context = ""
         pages = []
         for result in search_results:
-            pages.append(str(result.metadata['page']))
+            if is_pdf:
+                pages.append(str(result.metadata['page']))
             some_context += result.page_content + "\n\n"
         self.history.append({"role": "system", "content": f"relevant content for user question {some_context}"})
         self.history.append({"role": "user", "content": input_user})

@@ -123,12 +123,16 @@ with gr.Blocks() as main_tab:
         with gr.Row():
             with gr.Column(scale=12):
                 file_input = gr.File(label="Select a PDF file")
-                math_checkbox = gr.Checkbox(label="Enable math mode (your pdf file will be converted to some latex-like format for the chatbot to understand it better)")
+                math_checkbox = gr.Checkbox(label="Interpret as LaTeX (a latex version will be created then given to "
+                                                  "the chatbot, the conversion take some time)")
 
     with gr.Column():
         with gr.Group():
-            chatbot = gr.Chatbot(scale=2)
-            msg = gr.Textbox(scale=2)
+            chatbot = gr.Chatbot(scale=2,
+                                 latex_delimiters=[{"left": "$$", "right": "$$", "display": True},
+                                                   {"left": "$", "right": "$", "display": False}])
+            msg = gr.Textbox(label="User message", scale=2)
+
             msg.submit(user, [msg, chatbot], [msg, chatbot], queue=False).then(
                 bot, chatbot, chatbot
             )

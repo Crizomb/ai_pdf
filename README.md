@@ -1,21 +1,55 @@
-pdf ai but free and open-source
-work in progress
+Chat locally with any PDF
 
-early test : 
+Ask questions, get answer with usefull references 
 
-https://github.com/Crizomb/ai_pdf/assets/62544756/c7d71cc5-a18a-460c-a39c-63953e6e6a10
+Work well with math pdfs (convert them to LaTex, a math syntax comprehensible by computer)
+
+## Work flow chart
+
+![RAG_diagrams](https://github.com/Crizomb/ai_pdf/assets/62544756/430c28ac-ed48-4ac5-99ae-58b7f810250c)
+
+
+## Demos
+
+chatbot test with some US Laws pdf
+
+https://github.com/Crizomb/ai_pdf/assets/62544756/b399d5bc-df2f-4be0-b6fe-0c272f915c72
+
+chatbot test with math pdf (interpereted as latex by the LLM)
+
+https://github.com/Crizomb/ai_pdf/assets/62544756/eebf5520-bf78-4b82-8699-782e6d7147c4
+
+full length process of converting pdf to latex, then using the chat bot
+
+https://github.com/Crizomb/ai_pdf/assets/62544756/57bcc035-a7e0-4fdb-8c3a-4e72152765fa
+
+## How to use 
+
+Clone the project to some location that we will call 'x'
+
+Put your pdfs in x/ai_pdf/documents/pdfs
+Run x/ai_pdf/main.py
+Select or not math mode
+Choose the pdf you want to work on
+Wait a little bit for the pdf to get vectorized (check task manager to see if your gpu is going vrum)
+
+Launch LM Studio, Go to the local Server tab, choose 1234 as server port, start server
+(If you want to use open-ai or any other cloud LLM services, change line 10 of x/ai_pdf/back_end/inference.py with your api_key and your provider url)
+
+Ask questions to the chatbot
+Get answer
+Go eat cookies
+
 
 ### TODO 
 
 - [ ] Option tabs
-    - [ ] menu to select different embedding models, add default chunk size for each models
-    - [ ] menu to select pytorch acceleration (cuda etc...)
-    - [ ] menu to change api client
-    
-- [X] LaTex support
-    - [X] handle LaTex file
-    - [X] add pdf to latex tab for easy conversion of math pdf into readble math for LLM (added with nougat)
+    - [ ] add more different embedding models
+    - [ ] menu to configure api url and api key
+     
+## Maybe in the futur
 
-- [ ]  Add references text box, to show references used by the models
+- [ ] Add special support for code PDF (with specialized langchain code spliter)
+- [ ] Add Multimodality
       
 

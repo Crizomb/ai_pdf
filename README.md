@@ -6,8 +6,7 @@ Work well with math pdfs (convert them to LaTex, a math syntax comprehensible by
 
 ## Work flow chart
 
-![RAG_diagrams](https://github.com/Crizomb/ai_pdf/assets/62544756/430c28ac-ed48-4ac5-99ae-58b7f810250c)
-
+![RAG_diagrams](https://github.com/Crizomb/ai_pdf/assets/62544756/e9f31aea-0622-4833-a941-13c8ad1aea29)
 
 ## Demos
 

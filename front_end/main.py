@@ -2,12 +2,14 @@ import gradio as gr
 import os
 import subprocess
 from pathlib import Path
+import sys
 
-from langchain_community.embeddings.huggingface import HuggingFaceEmbeddings
-
+from backend.embeddings_manager import get_embedding_model, MODELS_DICT
 from backend.vector_db_manager import VectorDbManager
-from backend.inference import InferenceInstance
+from backend.inference import InferenceInstance, read_relevant_content
 from backend.pdf_to_mmd import pdf_to_mmd
+from backend.logger import Logger, read_logs
+
 import time
 
 
@@ -35,14 +37,20 @@ def start_server():
 # Start the server
 start_server()
 
-# Create VectorDbManager and Inference instance
+# Global variable etc...
 
-embedding_func = HuggingFaceEmbeddings(model_name="intfloat/multilingual-e5-large", model_kwargs={'device': 'cuda'})
-base_db_directory = Path(r"../documents/vector_db")
-vector_db_manager = VectorDbManager(embedding_name="multilingual-e5-large", embedding_function=embedding_func, chunk_size=512, db_directory=base_db_directory)
-inference_instance = InferenceInstance(vector_db_manager=vector_db_manager, nb_chunks_retrieved=4)
+BASE_DB_DIRECTORY = Path(r"../documents/vector_db")
 
 
+def update_embedding(embedding_name):
+    global BASE_DB_DIRECTORY, VECTOR_DB_MANAGER, INFERENCE_INSTANCE
+    embedding_func = get_embedding_model(embedding_name)
+    VECTOR_DB_MANAGER = VectorDbManager(embedding_name=embedding_name, embedding_function=embedding_func, chunk_size=512, db_directory=BASE_DB_DIRECTORY)
+    INFERENCE_INSTANCE = InferenceInstance(vector_db_manager=VECTOR_DB_MANAGER, nb_chunks_retrieved=4)
+    print(f"Updated embedding model to {embedding_name}")
+
+
+update_embedding("intfloat/multilingual-e5-large")
 user_message_global = ""
 
 
@@ -59,16 +67,16 @@ def bot(history):
         print(f"FOUND DOC_PATH {doc_path}")
         doc_extension = doc_path.split(".")[-1]
         if doc_extension == "mmd":
-            vector_db_manager.create_vector_store_from_latex(Path(doc_path))
+            VECTOR_DB_MANAGER.create_vector_store_from_latex(Path(doc_path))
         elif doc_extension == "pdf":
-            vector_db_manager.create_vector_store_from_pdf(doc_path)
+            VECTOR_DB_MANAGER.create_vector_store_from_pdf(doc_path)
         else:
             print(f"Unsupported extension: {doc_extension}")
     else:
         print("NOT FOUND DOC_PATH")
 
     doc_name = Path(doc_path).stem + ".mmd" if math_checkbox.value else Path(doc_path).name
-    bot_message = inference_instance.get_next_token(user_message_global, doc_name)
+    bot_message = INFERENCE_INSTANCE.get_next_token(user_message_global, doc_name)
     history[-1][1] = ""
     for message in bot_message:
         history[-1][1] = message
@@ -84,7 +92,6 @@ def update_path(p, checked):
     stem = Path(p).stem
     if checked:
         if not (Path(r"../documents/mmds") / (stem + ".mmd")).exists():
-            print(f"Converting {name} to MMD")
             pdf_to_mmd(r"../documents/pdfs/" + name)
         print(f"Selected DOC path: {stem}.mmd")
         doc_path = r"../documents/mmds/" + stem + ".mmd"
@@ -116,29 +123,44 @@ def pdf_viewer(pdf_file):
 
 # Define main Gradio tab
 with gr.Blocks() as main_tab:
-    with gr.Column():
-        with gr.Row():
-            with gr.Column(scale=12):
-                pdf_output = gr.HTML()
-        with gr.Row():
-            with gr.Column(scale=12):
-                file_input = gr.File(label="Select a PDF file")
-                math_checkbox = gr.Checkbox(label="Interpret as LaTeX (a latex version will be created then given to "
-                                                  "the chatbot, the conversion take some time)")
+    with gr.Row():
+        with gr.Column(scale = 3):
+            with gr.Row():
+                with gr.Column(scale=12):
+                    pdf_output = gr.HTML()
+            with gr.Row():
+                with gr.Column(scale=12):
+                    file_input = gr.File(label="Select a PDF file")
+                    math_checkbox = gr.Checkbox(label="Interpret as LaTeX (a latex version will be created then given to "
+                                                      "the chatbot, the conversion take some time)")
 
-    with gr.Column():
-        with gr.Group():
-            chatbot = gr.Chatbot(scale=2,
-                                 latex_delimiters=[{"left": "$$", "right": "$$", "display": True},
-                                                   {"left": "$", "right": "$", "display": False}])
-            msg = gr.Textbox(label="User message", scale=2)
+            with gr.Group():
+                chatbot = gr.Chatbot(scale=2,
+                                     latex_delimiters=[{"left": "$$", "right": "$$", "display": True},
+                                                       {"left": "$", "right": "$", "display": False}])
+                msg = gr.Textbox(label="User message", scale=2)
 
-            msg.submit(user, [msg, chatbot], [msg, chatbot], queue=False).then(
-                bot, chatbot, chatbot
-            )
+                msg.submit(user, [msg, chatbot], [msg, chatbot], queue=False).then(
+                    bot, chatbot, chatbot
+                )
+
+
+
+        with gr.Column():
+            references = gr.Markdown(label="References",
+                                     latex_delimiters=[{"left": "$$", "right": "$$", "display": True},
+                                                       {"left": "$", "right": "$", "display": False}])
+            main_tab.load(read_relevant_content, None, references, every=1)
 
     file_input.change(pdf_viewer, inputs=file_input, outputs=pdf_output)
     file_input.upload(update_path, inputs=[file_input, math_checkbox])
+
+
+# Define the log tab
+with gr.Blocks() as log_tab:
+    logs = gr.Textbox(lines=50, interactive=False)
+    sys.stdout = Logger("../temp_file/output.log")
+    log_tab.load(read_logs, None, logs, every=1)
 
 
 # Define options tab
@@ -148,6 +170,8 @@ with gr.Blocks() as options_tab:
             with gr.Column(scale=12):
                 # TODO: Add options for the inference instance
                 gr.Textbox(label="Options", scale=2)
+                embedding_model_dropdown = gr.Dropdown(label="Embedding model", choices=MODELS_DICT.keys(), value="intfloat/multilingual-e5-large")
+                embedding_model_dropdown.change(update_embedding, inputs=embedding_model_dropdown)
 
 
 # Define conversion tab
@@ -155,6 +179,8 @@ with gr.Blocks() as conversion_tab:
     with gr.Column():
         file_input = gr.File(label="Select a PDF file to convert to MMD")
         html_output = gr.HTML(label="Output")
+
+
 
     def upload_func(file_input):
         name = Path(file_input).name
@@ -165,6 +191,8 @@ with gr.Blocks() as conversion_tab:
     file_input.upload(upload_func, inputs=file_input)
 
 
-app = gr.TabbedInterface([main_tab, options_tab, conversion_tab], ["Main", "Options", "Conversion"])
+app = gr.TabbedInterface([main_tab, log_tab, options_tab, conversion_tab],
+                         ["Main", "Logs", "Options", "Conversion"])
 app.queue()
 app.launch()
+

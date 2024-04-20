@@ -1,6 +1,7 @@
 import subprocess
 from pathlib import Path
 import time
+from gradio import Info
 
 
 def pdf_to_mmd(path_input: str):
@@ -10,6 +11,13 @@ def pdf_to_mmd(path_input: str):
 
     stream stderr to the front end
     """
+    text = f"Converting {path_input} to LaTex, " \
+           f"it can take some time especially for big documents check progress in your terminal." \
+           f"Wait until the conversion is done to ask questions to the models."
+
+    print(text)
+    Info(text)
+
     output_dir = "../documents/mmds"
     command = ['nougat', path_input, "-o", output_dir]
     subprocess.run(command)
@@ -17,7 +25,6 @@ def pdf_to_mmd(path_input: str):
     # Change the math delimiter to the common delimiter used in MMD
     with open(f"{output_dir}/{str(Path(path_input).stem)}.mmd", "r+") as doc:
         content = doc.read()
-        print(content)
 
         content = content.replace(r"\[", "$$").replace(r"\]", "$$")
         content = content.replace(r"\(", "$").replace(r"\)", "$")

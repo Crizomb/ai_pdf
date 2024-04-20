@@ -1,0 +1,161 @@
+from:
+
+**N.J., Smelter, & P.B., Baltes (Eds.) (2001).**
+
+**Encyclopedia of the Social and Behavioral Sciences.**
+
+**London: Elsevier Science.**
+
+**Article Title: Linear Algebra for Neural Networks**
+
+**By: Herve Abdi**
+
+**Author Address:** Herve Abdi, School of Human Development, MS: Gr.4.1, The University of Texas at Dallas, Richardson, TX 750833-0688, USA
+
+**Phone:** 972 883 2065, **fax:** 972 883 2491 **Date:** June 1, 2001
+
+**E-mail:** herve@utdallas.edu
+
+**Abstract**
+
+Neural networks are quantitative models which learn to associate input and output patterns adaptively with the use of learning algorithms. We expose four main concepts from linear algebra which are essential for analyzing these models: 1) the projection of a vector, 2) the eigen and singular value decomposition, 3) the gradient vector and Hessian matrix of a vector function, and 4) the Taylor expansion of a vector function. We illustrate these concepts by the analysis of the Hebbian and Widrow-Hoff rules and some basic neural network architectures (i.e., the linear autoassociator, the linear heteroassociator, and the error backpropagation network). We show also that neural networks are equivalent to iterative versions of standard statistical and optimization models such as multiple regression analysis and principal component analysis.
+
+## 1 Introduction
+
+Linear algebra is particularly well suited to analyze the class of neural networks called _associators_. These quantitative models learn to associate input and out 
+
+[MISSING_PAGE_FAIL:2]
+
+### Projection of one vector onto another vector
+
+The (orthogonal) projection of vector $\boldsymbol{x}$ on vector $\boldsymbol{w}$ is defined as
+
+$$\mathsf{proj}_{\boldsymbol{w}}\boldsymbol{x}=\frac{\boldsymbol{x}^{\mskip-1.5mu \mathsf{T}} \boldsymbol{w}}{\boldsymbol{w}^{\mskip-1.5mu \mathsf{T}}\boldsymbol{w}} \boldsymbol{w}=\mathsf{cos}(\boldsymbol{x},\boldsymbol{w})\times\frac{\| \boldsymbol{x}\|}{\|\boldsymbol{w}\|}\boldsymbol{w}. \tag{3}$$
+
+The norm of $\mathsf{proj}_{\boldsymbol{w}}\boldsymbol{x}$ is its distance to the origin of the space. It is equal to
+
+$$\|\mathsf{proj}_{\boldsymbol{w}}\boldsymbol{x}\|=\frac{|\boldsymbol{x}^{ \mskip-1.5mu \mathsf{T}}\boldsymbol{w}|}{\|\boldsymbol{w}\|}=|\mathsf{ cos}(\boldsymbol{x},\boldsymbol{y})|\times\|\boldsymbol{x}\|\enspace. \tag{4}$$
+
+### Illustration: Hebbian and Widrow-Hoff learning rules
+
+A neural network consists of cells connected to other cells via modifiable weighted _connections_ called _synapses_. Consider a network made of $I$ input cells and only one output cell. The information is transmitted via the synapses, from a set of external input cells to the output cell which gives a response corresponding to its state of activation. If the input pattern and the set of synaptic weights are given by $I$-dimensional vectors denoted $\boldsymbol{x}$, and $\boldsymbol{w}$, the activation of the output cell is obtained as
+
+$$a=\boldsymbol{x}^{\mskip-1.5mu \mathsf{T}}\boldsymbol{w}. \tag{5}$$
+
+So the activation is proportional to the norm of the projection of the input vector onto the weight vector. The _response_ or _output_ of the cell is denoted $o$. For a _linear cell_, it is proportional to the activation (for convenience, assume that the proportionality constant is equal to $1$). _Linear heteroassociators_ and _autoassociators_ are made of linear cells. In general, the output of a cell is a _function_ (often, but not necessarily, continuous), called the _transfer function_, of its activation
+
+$$o=f\left(a\right)\enspace. \tag{6}$$
+
+For example, in _backpropagation networks_, the (nonlinear) transfer function is usually the logistic function
+
+$$o=f\left(a\right)=\operatorname{logist}\boldsymbol{w}^{\mskip-1.5mu \mathsf{T}} \boldsymbol{x}=\frac{1}{1+\exp\{-a\}}\enspace. \tag{7}$$
+
+Often, a neural network is designed to associate, to a given input, a specific response called the target, denoted $t$. _Learning_ is equivalent to defining a rule that specifies how to add a small quantity to each synaptic weight at each learning iteration. Learning makes the output of the network closer to the target.
+
+Learning rules come in two main flavors: _supervised_ (_e.g.,_ Widrow-Hoff) which take into account the error or distance between the response of the neuron and the target and _unsupervised_ (_e.g.,_ Hebbian) which do not require such "feedback." The Hebbian learning rule modifies the weight vector at iteration $n+1$ as
+
+$$\boldsymbol{w}_{[n+1]}=\boldsymbol{w}_{[n]}+\eta t\boldsymbol{x}\, \tag{8}$$
+
+[MISSING_PAGE_FAIL:4]
+
+if $\lambda\neq 1$). There are, in general, several eigenvectors for a given matrix (at most as many as the dimension of $\mathbf{W}$). They are in general ordered by decreasing order of their eigenvalue. So, the first eigenvector, $\mathbf{u}_{1}$ has the largest eigenvalue $\lambda_{1}$. The number of eigenvectors with a non-zero eigenvalue is the _rank_ of the matrix.
+
+The eigenvalues of positive semi-definite matrices are always positive or zero (a matrix with strictly positive eigenvalues, is _positive definite_). Also, any two eigenvectors with different eigenvalues are orthogonal, i.e.
+
+$$\mathbf{u}_{\ell}^{\mathsf{T}}\mathbf{u}_{\ell^{\prime}}=0\qquad\forall\quad\ell\neq \ell^{\prime}. \tag{15}$$
+
+In addition, the set of eigenvectors of a matrix constitutes an orthogonal basis for its rows and columns. This is expressed by defining two matrices: the eigenvector matrix $\mathbf{U}$, and the diagonal matrix of the eigenvalues: $\mathbf{\Lambda}$. The eigendecomposition of $\mathbf{W}$ (with rank $L$) is
+
+$$\mathbf{W}=\mathbf{U}\mathbf{\Lambda}\mathbf{U}^{\mathsf{T}}=\sum_{\ell}^{L}\lambda_{\ell}\bm {u}_{\ell}\mathbf{u}_{\ell}^{\mathsf{T}},\ \text{or equivalently:}\quad\mathbf{\Lambda}=\mathbf{U}^{ \mathsf{T}}\mathbf{W}\mathbf{U}. \tag{16}$$
+
+The _singular value decomposition_ (svd) generalizes the eigendecomposition to rectangular matrices. If $\mathbf{X}$ is an $I\times K$ matrix, its svd is defined as
+
+$$\mathbf{X}=\mathbf{U}\mathbf{\Delta}\mathbf{V}^{\mathsf{T}}\ \text{with}\ \mathbf{U}^{\mathsf{T}}\mathbf{U}=\mathbf{V}^{ \mathsf{T}}\mathbf{V}=\mathbf{I}\ \text{and}\ \mathbf{\Delta}\ \text{being a diagonal matrix}\ . \tag{17}$$
+
+($\mathbf{I}$ being the _identity_ matrix). The diagonal elements of $\mathbf{\Delta}$ are real positive numbers called the _singular values_ of $\mathbf{X}$. The matrices $\mathbf{U}$ and $\mathbf{V}$ are the left and right matrices of singular vectors (which are also eigenvectors, see below). The svd is closely related to the eigendecomposition because $\mathbf{U}$, $\mathbf{V}$, and $\mathbf{\Delta}$ can be obtained from the eigendecomposition of matrices $\mathbf{X}^{\mathsf{T}}\mathbf{X}$ and $\mathbf{X}\mathbf{X}^{\mathsf{T}}$ as
+
+$$\mathbf{X}\mathbf{X}^{\mathsf{T}}=\mathbf{U}\mathbf{\Lambda}\mathbf{U}^{\mathsf{T}},\quad\mathbf{X}^{ \mathsf{T}}\mathbf{X}=\mathbf{V}\mathbf{\Lambda}\mathbf{V}^{\mathsf{T}},\ \text{and}\ \mathbf{\Delta}=\mathbf{\Lambda}^{\frac{1}{2}} \tag{18}$$
+
+(note that $\mathbf{X}^{\mathsf{T}}\mathbf{X}$ and 
+
+[MISSING_PAGE_EMPTY:6]
+
+The derivative of $f\left(\mathbf{w}\right)$ with respect to the $I\times 1$ vector $\mathbf{w}$ is denoted by $\mathbf{\nabla}_{\mathbf{f}\left(\mathbf{w}\right)}$. It is also called the _gradient_ of $f$, i.e.,
+
+$$\mathbf{\nabla}_{\mathbf{f}\left(\mathbf{w}\right)}=\frac{\partial f}{\partial\mathbf{w}}= \left[\frac{\partial f}{\partial w_{1}},\ldots,\frac{\partial f}{\partial w_{ i}},\ldots,\frac{\partial f}{\partial w_{I}}\right]^{\mathsf{T}}. \tag{26}$$
+
+For example, the derivative of the output of a linear neuron is
+
+$$\frac{\partial f}{\partial\mathbf{w}}=\left[\frac{\partial\mathbf{w}^{\mathsf{T}}\mathbf{x }}{\partial w_{1}},\ldots,\frac{\partial\mathbf{w}^{\mathsf{T}}\mathbf{x}}{\partial w_ {i}},\ldots,\frac{\partial\mathbf{w}^{\mathsf{T}}\mathbf{x}}{\partial w_{I}}\right]^{ \mathsf{T}}=\left[x_{1},\ldots,x_{i},\ldots,x_{I}\right]^{\mathsf{T}}=\mathbf{x}. \tag{27}$$
+
+When a function is twice differentiable, the second order derivatives are stored in a matrix called the _Hessian_ matrix of the function. It is often denoted by $\mathbf{H}$ or $\mathbf{\nabla}_{\mathbf{f}}^{\mathsf{2}}$ and is formally defined as
+
+$$\mathbf{H}=\mathbf{\nabla}_{\mathbf{f}}^{\mathsf{2}}=\begin{bmatrix}\frac{\partial^{2}f}{ \partial w_{1}^{2}}&\frac{\partial^{2}f}{\partial w_{1}w_{2}}&\ldots&\frac{ \partial^{2}f}{\partial w_{1}w_{I}}\\ \frac{\partial^{2}f}{\partial w_{2}w_{1}}&\frac{\partial^{2}f}{\partial w_{2} ^{2}}&\ldots&\frac{\partial^{2}f}{\partial w_{2}w_{I}}\\ \vdots&\vdots&\ddots&\vdots\\ \frac{\partial^{2}f}{\partial w_{I}w_{1}}&\frac{\partial^{2}f}{\partial w_{I} w_{2}}&\ldots&\frac{\partial^{2}f}{\partial w_{I}^{2}}\end{bmatrix}. \tag{28}$$
+
+### Conditions for minimum
+
+A standard problem is to show that a given learning rule finds an optimum solution in the sense that a function of the weight vector (or matrix) called the _error function_ reaches its minimum value when learning has converged. Often, the error function is defined as the sum of the squared error over all patterns.
+
+When the gradient of the error function can be evaluated, a necessary condition for optimality (_i.e.,_ either minimum or maximum) is to find a weight vector $\widetilde{\mathbf{w}}$ such that
+
+$$\mathbf{\nabla}_{\mathbf{f}\left(\widetilde{\mathbf{w}}\right)}=\mathbf{0}. \tag{29}$$
+
+This condition is also sufficient provided $\mathbf{H}$ is positive definite (cf. Haykin, 1999).
+
+### Taylor expansion
+
+The Taylor expansion is the standard technique used to obtain a linear or a quadratic approximation of a function of one variable. Recall that the Taylor expansion of a continuous function $f(x)$ is
+
+$$f(x) =f(a)+(x-a)\frac{f^{{}^{\prime}}(a)}{1!}+(x-a)^{2}\frac{f^{{}^{ \prime\prime}}(a)}{2!}+\ldots(x-a)^{n}\frac{f^{[n]}(a)}{n!}+\ldots$$ $$=f(a)+(x-a)\frac{f^{{}^{\prime}}(a)}{1!}+(x-a)^{2}\frac{f^{{}^{ \prime\prime}}(a)}{2!}+\mathcal{R}_{2}. \tag{30}$$(where $\mathcal{R}_{2}$ represents all the terms of higher order than 2, and $a$ is a "convenient" value at which to evaluate $f$).
+
+This technique can be extended to matrix and vector functions. It involves the notion of gradient and Hessian. Now a vector function $f\left(\boldsymbol{x}\right)$ is expressed as:
+
+$$f\left(\boldsymbol{x}\right)=f\left(\boldsymbol{a}\right)+f\left(\boldsymbol{ x-a}\right)^{\mathsf{T}}\boldsymbol{\nabla}_{\boldsymbol{f(a)}}+f\left( \boldsymbol{x-a}\right)^{\mathsf{T}}\boldsymbol{\nabla}_{\boldsymbol{f(a)}}^ {2}f\left(\boldsymbol{x-a}\right)+\mathcal{R}_{2}. \tag{31}$$
+
+### Iterative minimization
+
+A learning rule can be shown to converge to an optimum if it diminishes the value of the error function at each iteration. When the gradient of the error function can be evaluated, the _gradient_ technique (or _steepest descent_) adjusts the weight vector by moving it in the direction opposite to the gradient of the error function. Formally, the correction for the $(n+1)$-th iteration is
+
+$$\boldsymbol{w}_{[n+1]}=\boldsymbol{w}_{[n]}+\boldsymbol{\Delta}=\boldsymbol{w }_{[n]}-\eta\boldsymbol{\nabla}_{\boldsymbol{f(w)}} \tag{32}$$
+
+(where $\boldsymbol{\nabla}_{\boldsymbol{f(w)}}$ is computed for $\boldsymbol{w}_{[n]}$).
+
+As an example, let us show that for a linear heteroassociator, the Widrow-Hoff learning rule minimizes iteratively the squared error between target and output. The error function is
+
+$$e^{2}=(t-o)^{2}=t^{2}+o^{2}-2to=t^{2}+\boldsymbol{x}^{\mathsf{T}}\boldsymbol{ w}\boldsymbol{w}^{\mathsf{T}}\boldsymbol{x}-2t\boldsymbol{w}^{\mathsf{T}} \boldsymbol{x}. \tag{33}$$
+
+The gradient of the error function is
+
+$$\frac{\partial e}{\partial\boldsymbol{w}}=2(\boldsymbol{w}^{\mathsf{T}} \boldsymbol{x})\boldsymbol{x}-2t\boldsymbol{x}=-2(t-\boldsymbol{w}^{\mathsf{ T}}\boldsymbol{x})\boldsymbol{x}. \tag{34}$$
+
+The weight vector is corrected by moving it in the opposite direction of the gradient. This is obtained by adding a small vector denoted $\boldsymbol{\Delta}_{\boldsymbol{w}}$ opposite to the gradient. This gives the following correction for iteration $n+1$:
+
+$$\boldsymbol{w}_{[n+1]}=\boldsymbol{w}_{[n]}+\boldsymbol{\Delta}_{\boldsymbol{ w}}=\boldsymbol{w}_{[n]}-\eta\frac{\partial e}{\partial\boldsymbol{w}}= \boldsymbol{w}_{[n]}+\eta(t-\boldsymbol{w}^{\mathsf{T}}\boldsymbol{x}) \boldsymbol{x}=\boldsymbol{w}_{[n]}+\eta(t-o)\boldsymbol{x}. \tag{35}$$
+
+This gives the rule defined by Equation 9.
+
+The gradient method works because the gradient of $\boldsymbol{w}_{[n]}$ is a first order Taylor approximation of the gradient of the optimal weight vector $\widetilde{\boldsymbol{w}}$. It is a favorite technique in neural networks because the popular error backpropagation is a gradient technique.
+
+_Newton's method_ is a second order Taylor approximation, it uses the inverse of the Hessian of $\boldsymbol{w}$ (supposing it exists). It gives a better numerical approximation but necessitates more computation. Here the correction for iteration $n+1$ is
+
+$$\boldsymbol{w}_{[n+1]}=\boldsymbol{w}_{[n]}+\boldsymbol{\Delta}=\boldsymbol{w} _{[n]}-(\boldsymbol{H}^{-1})(\boldsymbol{\nabla}_{\boldsymbol{f(w)}}) \tag{36}$$
+
+(where $\boldsymbol{\nabla}_{\boldsymbol{f(w)}}$ is computed for $\boldsymbol{w}_{[n]}$).
+
+Useful References
+
+Linear algebra at the level of this presentation is available in the following recent books: Abdi _et al._ (1999), Bishop (1995) Ellacot and Bose (1996), Haggan, Demuth, and Beale (1996), Haykin (1999), Reed and Marks (1999), Ripley (1996), and Rojas (1996).
+
+_See also:_ Artificial neural networks: neurocomputation; Backpropagation; Hebb, Donald Olding (1904-1985); Statistical pattern recognition.
+
+## References
+
+* [1]abdi, h. (1994a) _Les reseaux de neurones_. Grenoble, France: PUG.
+* [2]abdi, h., valentin, d., & edelman, b. (1999) _Neural networks_. Thousand Oak, CA: Sage.
+* [3]bishop, c.m. (1995) _Neural network for pattern recognition_. Oxford, UK: Oxford University Press.
+* [4]ellacott, s., & bose, d. (1996) _Neural networks: Deterministic methods of analysis_. London: ITC.
+* [5]hagan, m. t., demuth, h. b., & beale, m. (1996) _Neural networks design_. Boston: PWS.
+* [6]haykin, s. (1999) _Neural networks: A comprehensive foundation_ (2nd ed). New York: Prentice Hall.
+* [7]reed, r.d., marks r.j. (1999) _Neural smithing_. Cambridge, MA: MIT press.
+* [8]ripley, b.d. (1996) _Pattern recognition and neural networks_. Cambridge, MA: Cambridge University Press.
+* [9]rojas, r. (1996) _Neural networks_. New York: Springer-Verlag.

@@ -12,9 +12,8 @@ https://github.com/Crizomb/ai_pdf/assets/62544756/c7d71cc5-a18a-460c-a39c-63953e
     - [ ] menu to select pytorch acceleration (cuda etc...)
     - [ ] menu to change api client
     
-- [ ] LaTex support
+- [X] LaTex support
     - [X] handle LaTex file
-    - [ ] flat latex directory to single file to handle directory
     - [X] add pdf to latex tab for easy conversion of math pdf into readble math for LLM (added with nougat)
 
 - [ ]  Add references text box, to show references used by the models

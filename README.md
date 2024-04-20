@@ -26,6 +26,9 @@ https://github.com/Crizomb/ai_pdf/assets/62544756/57bcc035-a7e0-4fdb-8c3a-4e7215
 ## How to use 
 
 Clone the project to some location that we will call 'x'
+install requierements listed in the requirements.txt file
+(open terminal, go to the 'x' location, run pip install -r requirements.txt)
+([OPTIONAL] for better performance during embedding, install pytorch with cuda, go to https://pytorch.org/get-started/locally/) 
 
 Put your pdfs in x/ai_pdf/documents/pdfs
 Run x/ai_pdf/main.py

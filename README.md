@@ -33,7 +33,7 @@ Select or not math mode
 Choose the pdf you want to work on
 Wait a little bit for the pdf to get vectorized (check task manager to see if your gpu is going vrum)
 
-Launch LM Studio, Go to the local Server tab, choose 1234 as server port, start server
+Launch LM Studio, Go to the local Server tab, choose the model you want to run, choose 1234 as server port, start server
 (If you want to use open-ai or any other cloud LLM services, change line 10 of x/ai_pdf/back_end/inference.py with your api_key and your provider url)
 
 Ask questions to the chatbot
@@ -45,6 +45,7 @@ Go eat cookies
 
 - [ ] Option tabs
     - [ ] add more different embedding models
+    - [ ] add menu to choose how many relevant chunk of information the vector search should get from the vector db
     - [ ] menu to configure api url and api key
      
 ## Maybe in the futur

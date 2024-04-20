@@ -27,23 +27,23 @@ https://github.com/Crizomb/ai_pdf/assets/62544756/a10238f1-2e26-4a97-94d0-d32ec5
 
 ## How to use 
 
-Clone the project to some location that we will call 'x'
-install requierements listed in the requirements.txt file
-(open terminal, go to the 'x' location, run pip install -r requirements.txt)
-([OPTIONAL] for better performance during embedding, install pytorch with cuda, go to https://pytorch.org/get-started/locally/) 
+* Clone the project to some location that we will call 'x'
+* install requierements listed in the requirements.txt file
+* (open terminal, go to the 'x' location, run pip install -r requirements.txt)
+* ([OPTIONAL] for better performance during embedding, install pytorch with cuda, go to https://pytorch.org/get-started/locally/) 
 
-Put your pdfs in x/ai_pdf/documents/pdfs
-Run x/ai_pdf/main.py
-Select or not math mode
-Choose the pdf you want to work on
-Wait a little bit for the pdf to get vectorized (check task manager to see if your gpu is going vrum)
+* Put your pdfs in x/ai_pdf/documents/pdfs
+* Run x/ai_pdf/main.py
+* Select or not math mode
+* Choose the pdf you want to work on
+* Wait a little bit for the pdf to get vectorized (check task manager to see if your gpu is going vrum)
 
-Launch LM Studio, Go to the local Server tab, choose the model you want to run, choose 1234 as server port, start server
-(If you want to use open-ai or any other cloud LLM services, change line 10 of x/ai_pdf/back_end/inference.py with your api_key and your provider url)
+* Launch LM Studio, Go to the local Server tab, choose the model you want to run, choose 1234 as server port, start server
+* (If you want to use open-ai or any other cloud LLM services, change line 10 of x/ai_pdf/back_end/inference.py with your api_key and your provider url)
 
-Ask questions to the chatbot
-Get answer
-Go eat cookies
+* Ask questions to the chatbot
+* Get answer
+* Go eat cookies
 
 
 ### TODO 

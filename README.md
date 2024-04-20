@@ -21,7 +21,10 @@ https://github.com/Crizomb/ai_pdf/assets/62544756/eebf5520-bf78-4b82-8699-782e6d
 
 full length process of converting pdf to latex, then using the chat bot
 
-https://github.com/Crizomb/ai_pdf/assets/62544756/57bcc035-a7e0-4fdb-8c3a-4e72152765fa
+https://github.com/Crizomb/ai_pdf/assets/62544756/a10238f1-2e26-4a97-94d0-d32ec52ee195
+
+
+
 
 ## How to use 
 

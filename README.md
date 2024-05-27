@@ -35,7 +35,7 @@ https://github.com/Crizomb/ai_pdf/assets/62544756/a10238f1-2e26-4a97-94d0-d32ec5
 * Put your pdfs in x/ai_pdf/documents/pdfs
 * Run x/ai_pdf/front_end/main.py
 * Select or not math mode
-* Choose the pdf you want to work on
+* Choose the pdf you want to work on (those documents must be on x/ai_pdf/documents/pdfs to work well)
 * Wait a little bit for the pdf to get vectorized (check task manager to see if your gpu is going vrum)
 
 * Launch LM Studio, Go to the local Server tab, choose the model you want to run, choose 1234 as server port, start server

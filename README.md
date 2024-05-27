@@ -33,7 +33,7 @@ https://github.com/Crizomb/ai_pdf/assets/62544756/a10238f1-2e26-4a97-94d0-d32ec5
 * ([OPTIONAL] for better performance during embedding, install pytorch with cuda, go to https://pytorch.org/get-started/locally/) 
 
 * Put your pdfs in x/ai_pdf/documents/pdfs
-* Run x/ai_pdf/main.py
+* Run x/ai_pdf/front_end/main.py
 * Select or not math mode
 * Choose the pdf you want to work on
 * Wait a little bit for the pdf to get vectorized (check task manager to see if your gpu is going vrum)
